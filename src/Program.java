@@ -3,11 +3,16 @@ import javax.swing.JDialog;
 import java.awt.Window;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader; 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Program {
    public static void main(String[] args){
       File fl = Init();
-      System.out.println(fl.getName()); // DEBUG: REMOVE before Submission
+      //System.out.println(fl.getName()); // DEBUG: REMOVE before Submission
      
       // Instantiate your Application Class and start Processing the data (@fl)    
            
@@ -36,8 +41,29 @@ public class Program {
          // File Was Chosen
          File fl = chooser.getSelectedFile(); // The File Selected
          dlg.dispose();
-         
-         return fl;
+         String line = null;
+         try{
+         BufferedReader br = new BufferedReader(new FileReader(fl));
+         while((line = br.readLine()) != null) {
+         final String UTF8_BOM = "\uFEFF";
+         // Removes the question mark symbol form the output
+         if (line.startsWith(UTF8_BOM)) {
+             line = line.substring(1);
+         }
+            String[] values = line.split(",");
+            // Prints all values line by line and separates them with spaces
+            
+            System.out.println(values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7] );
+            }
+}
+         catch (FileNotFoundException e) {
+         e.printStackTrace();
+         }
+         catch (IOException e) {
+         e.printStackTrace();
+         }
+         //return fl;
+         return null;
       }
    }
 }
