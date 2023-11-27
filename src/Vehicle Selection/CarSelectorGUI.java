@@ -36,7 +36,7 @@ public class CarSelectorGUI {
         });
         
     }
-
+    //Once a CSV file is found, initializes GUI
     public void initialize() {
         frame = new JFrame("Car Selector");
         frame.setSize(400, 300);
@@ -54,7 +54,7 @@ public class CarSelectorGUI {
 
         frame.setVisible(true);
     }
-
+    //Creating menu options for the user to select
     private void createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -66,7 +66,7 @@ public class CarSelectorGUI {
         menuBar.add(createShowVehiclesMenuItem());
         menuBar.add(saveToFileItem);
         menuBar.add(exitItem);
-
+        //Keeps track of previous selections to provide only possible values
         JMenuItem[] selectMenuItems = createSelectMenuItems();
         selectMenu.addMenuListener(new MenuListener() {
             @Override
@@ -142,8 +142,8 @@ public class CarSelectorGUI {
         });
 
         JMenuBar menuBar = frame.getJMenuBar();
-        menuBar.remove(0); // Remove the old "Select Vehicles" menu
-        menuBar.add(currentMenu, 0); // Add the new menu
+        menuBar.remove(0); 
+        menuBar.add(currentMenu, 0);
         frame.setJMenuBar(menuBar);
     }
 
@@ -172,7 +172,7 @@ public class CarSelectorGUI {
             currentMenu.add(item);
         }
     }
-
+    //Checks for user selections to show the user at the end
     private Set<String> getFilteredValues(List<List<String>> data, int columnIndex, List<String> previousSelections) {
         Set<String> values = new HashSet<>();
         for (int i = 1; i < data.size(); i++) {
@@ -199,7 +199,7 @@ public class CarSelectorGUI {
                 break;
             }
         }
-        //For all possible car combinations for 
+        //Displays selected car info
         if (index != -1) {
             for (int i = 0; i < carData.get(0).size(); i++) {
                 info.append(carData.get(0).get(i)).append(": ").append(carData.get(index).get(i)).append("\n");
@@ -207,7 +207,7 @@ public class CarSelectorGUI {
         }
         
         JTextArea textArea = new JTextArea(info.toString());
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPane = new JScrollPane(textArea);//scroll functionality for the Show Vehicles menu
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         scrollPane.setPreferredSize(new Dimension(400, 300));
@@ -225,7 +225,7 @@ public class CarSelectorGUI {
 
     private void showVehicles() {
         StringBuilder info = new StringBuilder("Vehicle Information:\n");
-
+      //Creates section for all possible car combinations for the Show Vehicles menu
         for (List<String> row : carData) {
             for (int i = 0; i < carData.get(0).size(); i++) {
                 info.append(carData.get(0).get(i)).append(": ").append(row.get(i)).append("\n");
@@ -242,13 +242,13 @@ public class CarSelectorGUI {
     }
 
     private void saveToFile() {
-        String dateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        String dateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()); //Gets date and time for output title
         try (FileWriter writer = new FileWriter("Vehicle_Selection_" + dateTime + ".csv")) {
-            // Write the header
-            writer.write(String.join(",", carData.get(0)) + "\n");
+            // Write the header of the output file using "|" as a delimiter and the first row of the .csv
+            writer.write(String.join("|", carData.get(0)) + "\n");
 
-            // Write the user's selections
-            writer.write(String.join(",", previousSelections) + "\n");
+            // Write the user's selections for the output file using "|" as a delimiter
+            writer.write(String.join("|", previousSelections) + "\n");
             JOptionPane.showMessageDialog(frame, "Selected car information saved to 'Vehicle_Selection_" + dateTime + ".csv'.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -260,7 +260,8 @@ public class CarSelectorGUI {
         if (!previousSelections.isEmpty()) {
             saveToFile();
         }
-        JOptionPane.showMessageDialog(frame, "Exiting program.");
+        JOptionPane.showMessageDialog(frame, "Exiting program.");//Designed for testing. This only occurs now if the code is run without
+        //using Program.java to select a .csv
         System.exit(0);
     }
 
